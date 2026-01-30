@@ -28,7 +28,7 @@ export default function Dropdown({
   return (
     <div className="flex flex-col gap-2">
         <label htmlFor={name}>{label}</label>
-        <div className={`w-fit rounded-md p-[1px] relative overflow-hidden z-1000 after:rounded-full
+        <div className={`w-fit rounded-md p-px relative overflow-hidden z-1000 after:rounded-full
           after:bg-conic-0 ${hasAnimation ? `after:animate-spin-slow after:from-purple-500 after:to-violet-400` : `after:from-purple-200 after:to-violet-100`}
           after:absolute after:w-50 after:h-50 after:left-[50%] after:top-[50%] after:-translate-[50%] after:z-10`}>
           <select 

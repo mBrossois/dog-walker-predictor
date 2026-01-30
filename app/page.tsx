@@ -1,5 +1,6 @@
 'use client'
 import Dropdown from "@/components/dropdown";
+import Input from "@/components/input";
 import { type SetStateAction, useState } from "react";
 
 const dayDropdown = [
@@ -20,15 +21,21 @@ const durationDropdown = [
 export default function Home() {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('');
+  const [location, setLocation] = useState('')
   const animation = getAnimationState();
 
   function getAnimationState() {
+    if(!location) return 'location'
     if(selectedTime === '') return 'time'
     if(selectedDuration === '') return 'duration'
     return ''
   }
 
-  function updateEvent(variant: 'time' | 'duration', value: SetStateAction<string>) {
+  function updateEvent(variant: 'time' | 'duration' | 'location', value: SetStateAction<string>) {
+    if(variant === 'location') {
+      setLocation(value)
+    }
+    
     if(variant === 'time') {
       setSelectedTime(value)
     }
@@ -41,10 +48,17 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-8 py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <Input 
+          label="Where do you live?" 
+          placeholder="Fill in your location" 
+          name="city" 
+          hasAnimation={animation === 'location'} 
+          value={location} 
+          onChange={location => updateEvent('location', location)} />
         <Dropdown 
           name="day-selector" 
           placeholder="Select a time range" 
-          label="In what time range do you want to walk your dog?" 
+          label="When do you want to walk your dog?" 
           options={dayDropdown}
           hasAnimation={animation === 'time'}
           selected={selectedTime}
