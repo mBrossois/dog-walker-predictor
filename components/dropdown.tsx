@@ -37,10 +37,10 @@ export default function Dropdown({
             name={name} 
             id={name} 
             aria-label={label}
-            className="dropdown relative z-100 outline-none
+            className="dropdown relative z-100 outline-none cursor-pointer appearance-none
               p-2 bg-indigo-700 text-fuchsia-50 rounded-md
               dark:bg-indigo-800 dark:text-indigo-100">
-            <option value="" disabled>{placeholder}</option>  
+            <option value="" disabled>{placeholder} </option>  
             {options.map(option => 
               <option value={option.value} key={option.value}>{option.label}</option>
             )}

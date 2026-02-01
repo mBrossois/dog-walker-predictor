@@ -1,4 +1,5 @@
 'use client'
+import Button from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Input from "@/components/input";
 import { type SetStateAction, useState } from "react";
@@ -28,7 +29,7 @@ export default function Home() {
     if(!location) return 'location'
     if(selectedTime === '') return 'time'
     if(selectedDuration === '') return 'duration'
-    return ''
+    return 'search'
   }
 
   function updateEvent(variant: 'time' | 'duration' | 'location', value: SetStateAction<string>) {
@@ -74,6 +75,8 @@ export default function Home() {
           selected={selectedDuration}
           onSetSelected={value => updateEvent('duration', value)}
           ></Dropdown>
+
+          <Button label="Search" hasAnimation={animation === 'search'}/>
       </main>
     </div>
   );
