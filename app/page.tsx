@@ -2,7 +2,7 @@
 import Button from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Input from "@/components/input";
-import { getBestTime } from "@/app/actions";
+import { getBestTime, getLocation } from "@/app/actions";
 import { type SetStateAction, useState } from "react";
 
 const dayDropdown = [
@@ -46,6 +46,17 @@ export default function Home() {
       setSelectedDuration(value)
     }
   }
+
+  async function updateLocation(value: SetStateAction<string>) {
+    updateEvent('location', value)
+
+    const inputValue = value.toString()
+    if(inputValue.length >= 3) {
+      const result = await getLocation(value.toString())
+      console.log(result)
+    }
+  }
+
   async function formAction(e: React.SubmitEvent<HTMLElement>) {
     e.preventDefault()
     const result = await getBestTime(location, selectedTime, selectedDuration);
@@ -62,7 +73,7 @@ export default function Home() {
             name="city" 
             hasAnimation={animation === 'location'} 
             value={location} 
-            onChange={location => updateEvent('location', location)} />
+            onChange={location => updateLocation(location)} />
           <Dropdown 
             name="day-selector" 
             placeholder="Select a time range" 
