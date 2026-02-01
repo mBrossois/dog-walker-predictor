@@ -2,6 +2,7 @@
 import Button from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Input from "@/components/input";
+import { getBestTime } from "@/app/actions";
 import { type SetStateAction, useState } from "react";
 
 const dayDropdown = [
@@ -45,38 +46,45 @@ export default function Home() {
       setSelectedDuration(value)
     }
   }
+  async function formAction(e: React.SubmitEvent<HTMLElement>) {
+    e.preventDefault()
+    const result = await getBestTime(location, selectedTime, selectedDuration);
+    console.log(result)
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-8 py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Input 
-          label="Where do you live?" 
-          placeholder="Fill in your location" 
-          name="city" 
-          hasAnimation={animation === 'location'} 
-          value={location} 
-          onChange={location => updateEvent('location', location)} />
-        <Dropdown 
-          name="day-selector" 
-          placeholder="Select a time range" 
-          label="When do you want to walk your dog?" 
-          options={dayDropdown}
-          hasAnimation={animation === 'time'}
-          selected={selectedTime}
-          onSetSelected={value => updateEvent('time', value)}
-          ></Dropdown>
+        <form className="flex flex-col gap-8" onSubmit={(e) => formAction(e)}>
+          <Input 
+            label="Where do you live?" 
+            placeholder="Fill in your location" 
+            name="city" 
+            hasAnimation={animation === 'location'} 
+            value={location} 
+            onChange={location => updateEvent('location', location)} />
+          <Dropdown 
+            name="day-selector" 
+            placeholder="Select a time range" 
+            label="When do you want to walk your dog?" 
+            options={dayDropdown}
+            hasAnimation={animation === 'time'}
+            selected={selectedTime}
+            onSetSelected={value => updateEvent('time', value)}
+            ></Dropdown>
 
-        <Dropdown 
-          name="duration-selector" 
-          placeholder="Select a duration" 
-          label="What amount of time do you walk your dog?" 
-          options={durationDropdown}
-          hasAnimation={animation === 'duration'}
-          selected={selectedDuration}
-          onSetSelected={value => updateEvent('duration', value)}
-          ></Dropdown>
+          <Dropdown 
+            name="duration-selector" 
+            placeholder="Select a duration" 
+            label="What amount of time do you walk your dog?" 
+            options={durationDropdown}
+            hasAnimation={animation === 'duration'}
+            selected={selectedDuration}
+            onSetSelected={value => updateEvent('duration', value)}
+            ></Dropdown>
 
           <Button label="Search" hasAnimation={animation === 'search'}/>
+          </form>
       </main>
     </div>
   );
