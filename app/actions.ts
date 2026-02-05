@@ -56,7 +56,8 @@ export async function getLocation(value: string) {
     try {
         const params = new URLSearchParams({
             q: value,
-            layer: 'city'
+            layer: 'city',
+            limit: '5'
         });
 
         const response = await fetch(`https://photon.komoot.io/api/?${params}`, {

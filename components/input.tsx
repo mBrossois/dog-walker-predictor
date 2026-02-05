@@ -32,6 +32,7 @@ export default function Input({
                     value={value} 
                     onChange={(e) => onChange(e.target.value)} />
             </div>
+            <dialog></dialog>
         </div>
     )
     

@@ -20,10 +20,18 @@ const durationDropdown = [
   {value: 60, label: '1 hour'},
 ]
 
+interface CitiesResult {
+  city: string,
+  country: string,
+  long: number,
+  lan: number
+}
+
 export default function Home() {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('');
   const [location, setLocation] = useState('')
+  const [suggestions, setSuggestions] = useState<CitiesResult[]>([])
   const animation = getAnimationState();
 
   function getAnimationState() {
@@ -52,8 +60,8 @@ export default function Home() {
 
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
-      const result = await getLocation(value.toString())
-      console.log(result)
+      const result: CitiesResult[] = await getLocation(value.toString())
+      setSuggestions(result)
     }
   }
 
