@@ -2,7 +2,7 @@
 import Button from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Input from "@/components/input";
-import { getBestTime } from "@/app/actions";
+import { getBestTime, getLocation } from "@/app/actions";
 import { type SetStateAction, useState } from "react";
 
 const dayDropdown = [
@@ -20,10 +20,18 @@ const durationDropdown = [
   {value: 60, label: '1 hour'},
 ]
 
+interface CitiesResult {
+  city: string,
+  country: string,
+  long: number,
+  lan: number
+}
+
 export default function Home() {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('');
   const [location, setLocation] = useState('')
+  const [suggestions, setSuggestions] = useState<CitiesResult[]>([])
   const animation = getAnimationState();
 
   function getAnimationState() {
@@ -46,6 +54,17 @@ export default function Home() {
       setSelectedDuration(value)
     }
   }
+
+  async function updateLocation(value: SetStateAction<string>) {
+    updateEvent('location', value)
+
+    const inputValue = value.toString()
+    if(inputValue.length >= 3) {
+      const result: CitiesResult[] = await getLocation(value.toString())
+      setSuggestions(result)
+    }
+  }
+
   async function formAction(e: React.SubmitEvent<HTMLElement>) {
     e.preventDefault()
     const result = await getBestTime(location, selectedTime, selectedDuration);
@@ -62,7 +81,7 @@ export default function Home() {
             name="city" 
             hasAnimation={animation === 'location'} 
             value={location} 
-            onChange={location => updateEvent('location', location)} />
+            onChange={location => updateLocation(location)} />
           <Dropdown 
             name="day-selector" 
             placeholder="Select a time range" 
