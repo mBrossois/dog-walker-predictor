@@ -1,5 +1,5 @@
 import { CitiesSuggestions, SuggestionResponse } from "@/app/types/city-suggestions"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 interface Props {
     name: string,
@@ -23,6 +23,19 @@ export default function Input({
     onSuggestionClick
 }: Props) {
 
+    const [isOpen, setIsOpen] = useState(false)
+    const [hasFocus, setHasFocus] = useState(false)
+
+    function closeDialog() {
+        setHasFocus(false)
+        setIsOpen(false)
+    }
+
+    if(suggestions.length >= 3 && !isOpen && hasFocus) {
+        setIsOpen(true)
+    }
+    else if(suggestions.length < 3 && isOpen) setIsOpen(false)
+
     return (
         <div className="relative w-fit flex flex-col gap-2">
             <label htmlFor={name}>{label}</label>
@@ -34,12 +47,15 @@ export default function Input({
                     name={name} 
                     id={name} 
                     placeholder={placeholder} 
-                    value={value} 
+                    value={value}
+                    onClick={() => setHasFocus(true)}
                     onChange={(e) => onChange(e.target.value)} />
             </div>
             <dialog 
-                open={suggestions.length > 0} 
-                className="flex flex-col top-[100%] w-full rounded-md z-10000 overflow-hidden">
+                open={isOpen} 
+                closedby="any"
+                onClose={() => closeDialog()}
+                className=" flex-col top-[100%] w-full rounded-md z-10000 overflow-hidden open:flex not-open:none">
                 {suggestions.map((suggestion, index) => 
                     <button 
                         key={index}
@@ -52,5 +68,4 @@ export default function Input({
             </dialog>
         </div>
     )
-    
 }
