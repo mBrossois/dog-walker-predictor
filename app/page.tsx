@@ -4,6 +4,7 @@ import Dropdown from "@/components/dropdown";
 import Input from "@/components/input";
 import { getBestTime, getLocation } from "@/app/actions";
 import { type SetStateAction, useState } from "react";
+import { CitiesSuggestions, SuggestionResponse } from "@/app/types/city-suggestions";
 
 const dayDropdown = [
   {value: 1, label: 'Next 1 hour'},
@@ -20,22 +21,16 @@ const durationDropdown = [
   {value: 60, label: '1 hour'},
 ]
 
-interface CitiesResult {
-  city: string,
-  country: string,
-  long: number,
-  lan: number
-}
-
 export default function Home() {
   const [selectedTime, setSelectedTime] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('');
   const [location, setLocation] = useState('')
-  const [suggestions, setSuggestions] = useState<CitiesResult[]>([])
+  const [suggestions, setSuggestions] = useState<CitiesSuggestions[]>([])
+  const [latitude, setLatitude] = useState<{long: number, lang: number}>()
   const animation = getAnimationState();
 
   function getAnimationState() {
-    if(!location) return 'location'
+    if(!latitude) return 'location'
     if(selectedTime === '') return 'time'
     if(selectedDuration === '') return 'duration'
     return 'search'
@@ -57,12 +52,56 @@ export default function Home() {
 
   async function updateLocation(value: SetStateAction<string>) {
     updateEvent('location', value)
+    setLatitude(undefined)
 
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
-      const result: CitiesResult[] = await getLocation(value.toString())
+      // const result: CitiesResult[] = await getLocation(value.toString())
+
+      const result: CitiesSuggestions[] = [
+        {
+          city: 'Rouen',
+          country: 'France',
+          lang: 4.1,
+          long: 3.2
+        },
+        {
+          city: 'Rouen',
+          country: 'France',
+          lang: 4.1,
+          long: 3.2
+        },
+        {
+          city: 'Rouen',
+          country: 'France',
+          lang: 4.1,
+          long: 3.2
+        },
+        {
+          city: 'Rouen',
+          country: 'France',
+          lang: 4.1,
+          long: 3.2
+        },
+        {
+          city: 'Rouen',
+          country: 'France',
+          lang: 4.1,
+          long: 3.2
+        },
+      ]
+
       setSuggestions(result)
+    } else {
+      setSuggestions([])
     }
+  }
+
+  function setSelectedLocation(suggestion: SetStateAction<SuggestionResponse>) {
+    const {location, long, lang} = suggestion as SuggestionResponse
+    setLatitude({long, lang})
+    setSuggestions([])
+    updateEvent('location', location)
   }
 
   async function formAction(e: React.SubmitEvent<HTMLElement>) {
@@ -81,7 +120,10 @@ export default function Home() {
             name="city" 
             hasAnimation={animation === 'location'} 
             value={location} 
-            onChange={location => updateLocation(location)} />
+            suggestions={suggestions}
+            onChange={location => updateLocation(location)}
+            onSuggestionClick={suggestion => setSelectedLocation(suggestion)}
+            />
           <Dropdown 
             name="day-selector" 
             placeholder="Select a time range" 
