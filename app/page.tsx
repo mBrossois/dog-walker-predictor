@@ -56,40 +56,40 @@ export default function Home() {
 
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
-      // const result: CitiesResult[] = await getLocation(value.toString())
+      const result: CitiesSuggestions[] = await getLocation(value.toString())
 
-      const result: CitiesSuggestions[] = [
-        {
-          city: 'Rouen',
-          country: 'France',
-          lang: 4.1,
-          long: 3.2
-        },
-        {
-          city: 'Rouen',
-          country: 'France',
-          lang: 4.1,
-          long: 3.2
-        },
-        {
-          city: 'Rouen',
-          country: 'France',
-          lang: 4.1,
-          long: 3.2
-        },
-        {
-          city: 'Rouen',
-          country: 'France',
-          lang: 4.1,
-          long: 3.2
-        },
-        {
-          city: 'Rouen',
-          country: 'France',
-          lang: 4.1,
-          long: 3.2
-        },
-      ]
+      // const result: CitiesSuggestions[] = [
+      //   {
+      //     city: 'Rouen',
+      //     country: 'France',
+      //     lang: 4.1,
+      //     long: 3.2
+      //   },
+      //   {
+      //     city: 'Rouen',
+      //     country: 'France',
+      //     lang: 4.1,
+      //     long: 3.2
+      //   },
+      //   {
+      //     city: 'Rouen',
+      //     country: 'France',
+      //     lang: 4.1,
+      //     long: 3.2
+      //   },
+      //   {
+      //     city: 'Rouen',
+      //     country: 'France',
+      //     lang: 4.1,
+      //     long: 3.2
+      //   },
+      //   {
+      //     city: 'Rouen',
+      //     country: 'France',
+      //     lang: 4.1,
+      //     long: 3.2
+      //   },
+      // ]
 
       setSuggestions(result)
     } else {

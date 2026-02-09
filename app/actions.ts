@@ -68,7 +68,7 @@ export async function getLocation(value: string) {
        })
        const data: GeocodingResult = await response.json()
        const cityData = data.features.map(item => {
-        return {city: item.properties.name, country: item.properties.country, lan: item.geometry.coordinates[0], long: item.geometry.coordinates[1]}
+        return {city: item.properties.name, country: item.properties.country, lang: item.geometry.coordinates[0], long: item.geometry.coordinates[1]}
        })
        return cityData
     } catch {
