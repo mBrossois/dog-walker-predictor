@@ -16,9 +16,9 @@ const dayDropdown = [
 ]
 
 const durationDropdown = [
-  {value: 15, label: '15 minutes'},
-  {value: 30, label: '30 minutes'},
-  {value: 60, label: '1 hour'},
+  {value: 1, label: '15 minutes'},
+  {value: 2, label: '30 minutes'},
+  {value: 4, label: '1 hour'},
 ]
 
 export default function Home() {
@@ -26,11 +26,11 @@ export default function Home() {
   const [selectedDuration, setSelectedDuration] = useState('');
   const [location, setLocation] = useState('')
   const [suggestions, setSuggestions] = useState<CitiesSuggestions[]>([])
-  const [latitude, setLatitude] = useState<{long: number, lang: number}>()
+  const [coords, setCoords] = useState<{long: number, lang: number}>()
   const animation = getAnimationState();
 
   function getAnimationState() {
-    if(!latitude) return 'location'
+    if(!coords) return 'location'
     if(selectedTime === '') return 'time'
     if(selectedDuration === '') return 'duration'
     return 'search'
@@ -52,7 +52,7 @@ export default function Home() {
 
   async function updateLocation(value: SetStateAction<string>) {
     updateEvent('location', value)
-    setLatitude(undefined)
+    setCoords(undefined)
 
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
@@ -99,15 +99,17 @@ export default function Home() {
 
   function setSelectedLocation(suggestion: SetStateAction<SuggestionResponse>) {
     const {location, long, lang} = suggestion as SuggestionResponse
-    setLatitude({long, lang})
+    setCoords({long, lang})
     setSuggestions([])
     updateEvent('location', location)
   }
 
   async function formAction(e: React.SubmitEvent<HTMLElement>) {
     e.preventDefault()
-    const result = await getBestTime(location, selectedTime, selectedDuration);
-    console.log(result)
+    if(coords) {
+      const result = await getBestTime(coords.long.toString(), coords.lang.toString(), selectedTime, selectedDuration);
+      console.log(result)
+    }
   }
 
   return (
