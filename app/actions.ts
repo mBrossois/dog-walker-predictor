@@ -8,22 +8,22 @@ interface Minutely15 {
 function calcBestTime(data: Minutely15, duration: string) {
     const amountDuration = Number(duration)
     const bestRainTime: Array<number> = []
+    const bestTempTime: Array<number> = []
 
     // Note to self, should be other way around + all together
-    data.rain.forEach((rain, index) => {
-        if(index >= 3) bestRainTime[index - 3] = bestRainTime[index - 3] += rain
-        if(index >= 2) bestRainTime[index - 2] = bestRainTime[index - 2] += rain
-        if(index >= 1) bestRainTime[index - 1] = bestRainTime[index - 1] += rain
-        bestRainTime[index] = bestRainTime[index] = rain
-    });
+    for(let i = data.rain.length - 1 - amountDuration; i > amountDuration; i-- ) {
+        bestRainTime[i] = data.rain[i]
+        bestTempTime[i] = data.temperature_2m[i]
 
-    const bestTempTime: Array<number> = []
-    data.temperature_2m.forEach((temp, index) => {
-        if(index >= 3) bestTempTime[index - 3] = bestTempTime[index - 3] += temp
-        if(index >= 2) bestTempTime[index - 2] = bestTempTime[index - 2] += temp
-        if(index >= 1) bestTempTime[index - 1] = bestTempTime[index - 1] += temp
-        bestTempTime[index] = bestTempTime[index] = temp
-    });
+        if(amountDuration >= 2) {
+            bestRainTime[i] += data.rain[i + 1]
+            bestTempTime[i] += data.temperature_2m[i + 1]
+        }
+        if(amountDuration === 4) {
+            bestRainTime[i] += data.rain[i + 2] + data.rain[i + 3]
+            bestTempTime[i] += data.temperature_2m[i + 2] + data.temperature_2m[i + 3]
+        } 
+    }
 
     console.log(bestTempTime)
 }
@@ -102,7 +102,7 @@ export async function getLocation(value: string) {
        })
        const data: GeocodingResult = await response.json()
        const cityData = data.features.map(item => {
-        return {city: item.properties.name, country: item.properties.country, lang: item.geometry.coordinates[0], long: item.geometry.coordinates[1]}
+        return {city: item.properties.name, country: item.properties.country, long: item.geometry.coordinates[0], latt: item.geometry.coordinates[1]}
        })
        return cityData
     } catch {

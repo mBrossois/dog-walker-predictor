@@ -26,7 +26,7 @@ export default function Home() {
   const [selectedDuration, setSelectedDuration] = useState('');
   const [location, setLocation] = useState('')
   const [suggestions, setSuggestions] = useState<CitiesSuggestions[]>([])
-  const [coords, setCoords] = useState<{long: number, lang: number}>()
+  const [coords, setCoords] = useState<{long: number, latt: number}>()
   const animation = getAnimationState();
 
   function getAnimationState() {
@@ -57,36 +57,36 @@ export default function Home() {
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
       const result: CitiesSuggestions[] = await getLocation(value.toString())
-
+      console.log(result)
       // const result: CitiesSuggestions[] = [
       //   {
       //     city: 'Rouen',
       //     country: 'France',
-      //     lang: 4.1,
+      //     latt: 4.1,
       //     long: 3.2
       //   },
       //   {
       //     city: 'Rouen',
       //     country: 'France',
-      //     lang: 4.1,
+      //     latt: 4.1,
       //     long: 3.2
       //   },
       //   {
       //     city: 'Rouen',
       //     country: 'France',
-      //     lang: 4.1,
+      //     latt: 4.1,
       //     long: 3.2
       //   },
       //   {
       //     city: 'Rouen',
       //     country: 'France',
-      //     lang: 4.1,
+      //     latt: 4.1,
       //     long: 3.2
       //   },
       //   {
       //     city: 'Rouen',
       //     country: 'France',
-      //     lang: 4.1,
+      //     latt: 4.1,
       //     long: 3.2
       //   },
       // ]
@@ -98,8 +98,8 @@ export default function Home() {
   }
 
   function setSelectedLocation(suggestion: SetStateAction<SuggestionResponse>) {
-    const {location, long, lang} = suggestion as SuggestionResponse
-    setCoords({long, lang})
+    const {location, long, latt} = suggestion as SuggestionResponse
+    setCoords({long, latt})
     setSuggestions([])
     updateEvent('location', location)
   }
@@ -107,7 +107,7 @@ export default function Home() {
   async function formAction(e: React.SubmitEvent<HTMLElement>) {
     e.preventDefault()
     if(coords) {
-      const result = await getBestTime(coords.long.toString(), coords.lang.toString(), selectedTime, selectedDuration);
+      const result = await getBestTime(coords.long.toString(), coords.latt.toString(), selectedTime, selectedDuration);
       console.log(result)
     }
   }
