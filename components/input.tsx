@@ -59,7 +59,7 @@ export default function Input({
                 {suggestions.map((suggestion, index) => 
                     <button 
                         key={index}
-                        onClick={() => onSuggestionClick({location: `${suggestion.city}, ${suggestion.country}`, long: suggestion.long, lang: suggestion.lang})}
+                        onClick={() => onSuggestionClick({location: `${suggestion.city}, ${suggestion.country}`, long: suggestion.long, latt: suggestion.latt})}
                         className="p-2 text-violet-800 border-b-1 border-violet-900 cursor-pointer
                             hover:bg-violet-800 hover:text-white"
                         >
