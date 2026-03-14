@@ -5,6 +5,7 @@ import Input from "@/components/input";
 import { getBestTime, getLocation } from "@/app/actions";
 import { type SetStateAction, useState } from "react";
 import { CitiesSuggestions, SuggestionResponse } from "@/app/types/city-suggestions";
+import { Time } from "@/app/types/time";
 
 const dayDropdown = [
   {value: 1, label: 'Next 1 hour'},
@@ -27,6 +28,7 @@ export default function Home() {
   const [location, setLocation] = useState('')
   const [suggestions, setSuggestions] = useState<CitiesSuggestions[]>([])
   const [coords, setCoords] = useState<{long: number, latt: number}>()
+  const [bestTime, setBestTime] = useState<Time | 'No data'>()
   const animation = getAnimationState();
 
   function getAnimationState() {
@@ -57,7 +59,6 @@ export default function Home() {
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
       const result: CitiesSuggestions[] = await getLocation(value.toString())
-      console.log(result)
       // const result: CitiesSuggestions[] = [
       //   {
       //     city: 'Rouen',
@@ -108,8 +109,26 @@ export default function Home() {
     e.preventDefault()
     if(coords) {
       const result = await getBestTime(coords.long.toString(), coords.latt.toString(), selectedTime, selectedDuration);
-      console.log(result)
+      setBestTime(result)
     }
+  }
+
+  function getTimeToWalk() {
+    if(!bestTime) {
+      return 'Something went wrong'
+    }
+
+    if(bestTime === 'No data') {
+      return 'Something went wrong'
+    }
+
+    const now = new Date().toLocaleTimeString()
+    const bestTimeDate = new Date(bestTime.time)
+    if(bestTimeDate.toLocaleTimeString() <= now) {
+      return 'now'
+    }
+    
+    return `at ${bestTimeDate.getHours()}:${bestTimeDate.getMinutes()}`
   }
 
   return (
@@ -148,6 +167,12 @@ export default function Home() {
 
           <Button label="Search" hasAnimation={animation === 'search'}/>
           </form>
+
+          {
+            bestTime ? 
+              <p>You should go {getTimeToWalk()}</p>
+            : null
+          }
       </main>
     </div>
   );

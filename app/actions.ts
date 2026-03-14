@@ -1,3 +1,7 @@
+'use server'
+
+import { Time } from "@/app/types/time";
+
 interface Minutely15 {
   rain: number[];
   snowfall: number[];
@@ -7,25 +11,61 @@ interface Minutely15 {
 }
 function calcBestTime(data: Minutely15, duration: string) {
     const amountDuration = Number(duration)
-    const bestRainTime: Array<number> = []
-    const bestTempTime: Array<number> = []
+    const listRainTimes: Array<number> = []
+    const listTempTimes: Array<number> = []
+    const listSnowfall: Array<number> = []
+    const listSunshine: Array<number> = []
 
-    // Note to self, should be other way around + all together
-    for(let i = data.rain.length - 1 - amountDuration; i > amountDuration; i-- ) {
-        bestRainTime[i] = data.rain[i]
-        bestTempTime[i] = data.temperature_2m[i]
+    for(let i = data.rain.length - 1 - amountDuration; i >= 0; i-- ) {
+        listRainTimes[i] = data.rain[i]
+        listTempTimes[i] = data.temperature_2m[i]
+        listSnowfall[i] = data.snowfall[i]
+        listSunshine[i] = data.sunshine_duration[i]
 
         if(amountDuration >= 2) {
-            bestRainTime[i] += data.rain[i + 1]
-            bestTempTime[i] += data.temperature_2m[i + 1]
+            listRainTimes[i] += data.rain[i + 1]
+            listTempTimes[i] += data.temperature_2m[i + 1]
+            listSnowfall[i] += data.snowfall[i + 1]
+            listSunshine[i] += data.sunshine_duration[i + 1]
         }
         if(amountDuration === 4) {
-            bestRainTime[i] += data.rain[i + 2] + data.rain[i + 3]
-            bestTempTime[i] += data.temperature_2m[i + 2] + data.temperature_2m[i + 3]
+            listRainTimes[i] += data.rain[i + 2] + data.rain[i + 3]
+            listTempTimes[i] += data.temperature_2m[i + 2] + data.temperature_2m[i + 3]
+            listSnowfall[i] += data.snowfall[i + 2] + data.snowfall[i + 3]
+            listSunshine[i] += data.sunshine_duration[i + 2] + data.sunshine_duration[i + 3]
         } 
     }
 
-    console.log(bestTempTime)
+    let bestTime: Time = {time: data.time[0], rain: listRainTimes[0], snow: listSnowfall[0], temp: listTempTimes[0], sunshine: listSunshine[0]}
+
+    for(let i = 1; i < listTempTimes.length; i++) {
+        if(listRainTimes[i] > bestTime.rain) continue;
+
+        if(listRainTimes[i] < bestTime.rain) {
+            bestTime = {time: data.time[i], rain: listRainTimes[i], snow: listSnowfall[i], temp: listTempTimes[i], sunshine: listSunshine[i] }
+            continue;
+        }
+
+        if(listSnowfall[i] > bestTime.snow) continue;
+        if(listSnowfall[i] < bestTime.snow) {
+            bestTime = {time: data.time[i], rain: listRainTimes[i], snow: listSnowfall[i], temp: listTempTimes[i], sunshine: listSunshine[i] }
+            continue;
+        }
+
+        if(listTempTimes[i] < bestTime.temp) continue
+        if(listTempTimes[i] > bestTime.temp) {
+            bestTime = {time: data.time[i], rain: listRainTimes[i], snow: listSnowfall[i], temp: listTempTimes[i], sunshine: listSunshine[i] }
+            continue;
+        }
+
+        if(listSunshine[i] < bestTime.sunshine) continue
+        if(listSunshine[i] > bestTime.sunshine) {
+            bestTime = {time: data.time[i], rain: listRainTimes[i], snow: listSnowfall[i], temp: listTempTimes[i], sunshine: listSunshine[i] }
+            continue;
+        }
+    }
+
+    return bestTime
 }
 
 export async function getBestTime(longitude: string, latitude: string, time: string, duration: string) {
@@ -34,7 +74,8 @@ export async function getBestTime(longitude: string, latitude: string, time: str
             latitude,
             longitude,
             minutely_15: 'temperature_2m,rain,snowfall,sunshine_duration',
-            forecast_minutely_15: (Number(time) * 4).toString()
+            forecast_minutely_15: (Number(time) * 4).toString(),
+            timezone: "auto",
         });
 
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`, {
@@ -46,9 +87,8 @@ export async function getBestTime(longitude: string, latitude: string, time: str
 
         const data = await response.json()
         if(!data.minutely_15) return 'No data'
-        calcBestTime(data.minutely_15, duration)
         
-        return data
+        return calcBestTime(data.minutely_15, duration)
     } catch {
         throw new Error('Failed to fetch weather forecast'); 
     };
