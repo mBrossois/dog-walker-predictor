@@ -6,6 +6,7 @@ import { getBestTime, getLocation } from "@/app/actions";
 import { type SetStateAction, useState } from "react";
 import { CitiesSuggestions, SuggestionResponse } from "@/app/types/city-suggestions";
 import { Time } from "@/app/types/time";
+import Forecast from "@/components/forecast";
 
 const dayDropdown = [
   {value: 1, label: 'Next 1 hour'},
@@ -111,29 +112,13 @@ export default function Home() {
       const result = await getBestTime(coords.long.toString(), coords.latt.toString(), selectedTime, selectedDuration);
       setBestTime(result)
     }
-  }
-
-  function getTimeToWalk() {
-    if(!bestTime) {
-      return 'Something went wrong'
-    }
-
-    if(bestTime === 'No data') {
-      return 'Something went wrong'
-    }
-
-    const now = new Date().toLocaleTimeString()
-    const bestTimeDate = new Date(bestTime.time)
-    if(bestTimeDate.toLocaleTimeString() <= now) {
-      return 'now'
-    }
-    
-    return `at ${bestTimeDate.getHours()}:${bestTimeDate.getMinutes()}`
-  }
+  }  
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center gap-8 py-32 px-16 bg-white dark:bg-black sm:items-start">
+      <main className="flex min-h-screen w-full max-w-4xl flex-col items-center gap-8 py-16 px-8 lg:py-32 lg:px-16 bg-white dark:bg-black sm:items-start">
+        <h1 className="text-3xl pb-4 md:text-4xl">When should I walk the dog?</h1>
+        <div className="w-full flex flex-col gap-16 md:flex-row">
         <form className="flex flex-col gap-8" onSubmit={(e) => formAction(e)}>
           <Input 
             label="Where do you live?" 
@@ -166,13 +151,9 @@ export default function Home() {
             ></Dropdown>
 
           <Button label="Search" hasAnimation={animation === 'search'}/>
-          </form>
-
-          {
-            bestTime ? 
-              <p>You should go {getTimeToWalk()}</p>
-            : null
-          }
+        </form>
+        <Forecast forecast={bestTime} />
+        </div>
       </main>
     </div>
   );
