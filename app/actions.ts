@@ -64,7 +64,7 @@ function calcBestTime(data: Minutely15, duration: string) {
             continue;
         }
     }
-
+    
     return bestTime
 }
 
