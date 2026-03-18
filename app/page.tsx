@@ -60,38 +60,6 @@ export default function Home() {
     const inputValue = value.toString()
     if(inputValue.length >= 3) {
       const result: CitiesSuggestions[] = await getLocation(value.toString())
-      // const result: CitiesSuggestions[] = [
-      //   {
-      //     city: 'Rouen',
-      //     country: 'France',
-      //     latt: 4.1,
-      //     long: 3.2
-      //   },
-      //   {
-      //     city: 'Rouen',
-      //     country: 'France',
-      //     latt: 4.1,
-      //     long: 3.2
-      //   },
-      //   {
-      //     city: 'Rouen',
-      //     country: 'France',
-      //     latt: 4.1,
-      //     long: 3.2
-      //   },
-      //   {
-      //     city: 'Rouen',
-      //     country: 'France',
-      //     latt: 4.1,
-      //     long: 3.2
-      //   },
-      //   {
-      //     city: 'Rouen',
-      //     country: 'France',
-      //     latt: 4.1,
-      //     long: 3.2
-      //   },
-      // ]
 
       setSuggestions(result)
     } else {
@@ -150,7 +118,7 @@ export default function Home() {
             onSetSelected={value => updateEvent('duration', value)}
             ></Dropdown>
 
-          <Button label="Search" hasAnimation={animation === 'search'}/>
+          <Button label="Show time" hasAnimation={animation === 'search'}/>
         </form>
         <Forecast forecast={bestTime} />
         </div>
