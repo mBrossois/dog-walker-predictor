@@ -84,7 +84,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-4xl flex-col items-center gap-8 py-16 px-8 lg:py-32 lg:px-16 bg-white dark:bg-black sm:items-start">
+      <main className="flex min-h-screen w-full max-w-4xl flex-col items-center gap-8 py-24 px-8 lg:py-32 lg:px-16 bg-white dark:bg-black sm:items-start">
         <h1 className="text-3xl pb-4 md:text-4xl">When should I walk the dog?</h1>
         <div className="w-full flex flex-col gap-16 md:flex-row">
         <form className="flex flex-col gap-8" onSubmit={(e) => formAction(e)}>
