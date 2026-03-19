@@ -28,7 +28,7 @@ export default function Forecast({
             return 'now'
         }
         
-        return `at ${bestTimeDate.getHours()}:${bestTimeDate.getMinutes()}`
+        return `at ${bestTimeDate.getHours()}:${bestTimeDate.getMinutes() === 0 ? '00' : bestTimeDate.getMinutes()}`
     }
 
     function displayForecast() {

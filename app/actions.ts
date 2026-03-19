@@ -68,13 +68,15 @@ function calcBestTime(data: Minutely15, duration: string) {
     return bestTime
 }
 
+const defaultDuration = 1
+
 export async function getBestTime(longitude: string, latitude: string, time: string, duration: string) {
     try {
         const params = new URLSearchParams({
             latitude,
             longitude,
             minutely_15: 'temperature_2m,rain,snowfall,sunshine_duration',
-            forecast_minutely_15: (Number(time) * 4).toString(),
+            forecast_minutely_15: (Number(time) * 4 + Number(duration) + defaultDuration).toString(),
             timezone: "auto",
         });
 
@@ -86,6 +88,8 @@ export async function getBestTime(longitude: string, latitude: string, time: str
         })
 
         const data = await response.json()
+        
+        console.log(data)
         if(!data.minutely_15) return 'No data'
         
         return calcBestTime(data.minutely_15, duration)
