@@ -13,7 +13,7 @@ export default function Button({
             after:bg-conic-0 ${hasAnimation ? `after:animate-spin-slow after:from-purple-300 after:to-violet-700 dark:after:from-purple-500 dark:after:to-violet-400` : `after:from-purple-900 after:to-purple-950 dark:after:from-purple-200 dark:after:to-violet-100`}
             after:absolute after:w-50 after:h-50 after:left-[50%] after:top-[50%] after:-translate-[50%] after:z-10
         `}>
-            <button type="submit" className="p-2 bg-indigo-300 text-indigo-950 dark:bg-indigo-700 min-w-40 rounded-md cursor-pointer relative z-1000 hover:bg-indigo-900 hover:text-indigo-50 dark:hover:bg-indigo-100 dark:hover:text-indigo-700 transition-all duration-300"
+            <button type="submit" className="p-2 bg-indigo-300 text-indigo-950 dark:text-indigo-50 dark:bg-indigo-700 min-w-40 rounded-md cursor-pointer relative z-1000 hover:bg-indigo-900 hover:text-indigo-50 dark:hover:bg-indigo-100 dark:hover:text-indigo-700 transition-all duration-300"
             >{label}</button>
         </div>
     )
