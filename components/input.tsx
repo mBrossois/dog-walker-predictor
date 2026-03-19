@@ -40,9 +40,9 @@ export default function Input({
         <div className="relative w-fit flex flex-col gap-2">
             <label htmlFor={name}>{label}</label>
             <div className={`p-[2px] w-fit overflow-hidden relative rounded-md
-                after:bg-conic-0 ${hasAnimation ? `after:animate-spin-slow after:from-purple-500 after:to-violet-400` : `after:from-purple-200 after:to-violet-100`}
+                after:bg-conic-0 ${hasAnimation ? `after:animate-spin-slow after:from-purple-300 after:to-violet-700 dark:after:from-purple-500 dark:after:to-violet-400` : `after:from-purple-900 after:to-purple-950 dark:after:from-purple-200 dark:after:to-violet-100`}
                 after:absolute after:w-60 after:h-60 after:left-[50%] after:top-[50%] after:-translate-[50%] after:z-10`}>
-                <input className="relative bg-black p-2 rounded-md outline-none z-1000" 
+                <input className="relative bg-white dark:bg-black p-2 rounded-md outline-none z-1000" 
                     autoComplete="off"
                     name={name} 
                     id={name} 
@@ -60,8 +60,11 @@ export default function Input({
                     <button 
                         key={index}
                         onClick={() => onSuggestionClick({location: `${suggestion.city}, ${suggestion.country}`, long: suggestion.long, latt: suggestion.latt})}
-                        className="p-2 text-violet-800 border-b-1 border-violet-900 cursor-pointer
-                            hover:bg-violet-800 hover:text-white"
+                        className="p-2 border-b-1 cursor-pointer
+                            bg-violet-400 text-white
+                            dark:bg-white dark:text-violet-800 dark:border-violet-900
+                            hover:bg-violet-900
+                            dark:hover:bg-violet-800 dark:hover:text-white"
                         >
                         <p className="text-left">{suggestion.city}, {suggestion.country}</p>
                     </button>)}

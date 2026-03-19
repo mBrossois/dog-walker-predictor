@@ -34,7 +34,7 @@ export default function Forecast({
     function displayForecast() {
         return (
             <>
-                <span>You should go {getTimeToWalk()}</span>
+                <span>You should go <strong>{getTimeToWalk()}</strong></span>
             </>
         )
     }
@@ -59,7 +59,7 @@ export default function Forecast({
     
 
     return (
-        <div className="relative w-full h-104 p-4 border-2 border-white border-dashed rounded-xl">
+        <div className="relative w-full h-104 p-4 border-2 border-black dark:border-white border-dashed rounded-xl">
             <p className="text-3xl text-center pt-4">    
                 {
                     forecast ? 
