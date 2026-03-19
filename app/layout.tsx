@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Image className="absolute left-4 top-4" src="logo.svg" alt="logo" width={69} height={69}></Image>
+        <Image className="absolute right-6 top-4" src="logo.svg" alt="logo" width={69} height={69}></Image>
         {children}
       </body>
     </html>
